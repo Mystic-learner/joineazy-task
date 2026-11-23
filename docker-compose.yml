@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:16
+    environment: { POSTGRES_USER: joineazy, POSTGRES_PASSWORD: joineazy, POSTGRES_DB: joineazy }
+    volumes: [pgdata:/var/lib/postgresql/data]
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgres://joineazy:joineazy@db:5432/joineazy
+      JWT_SECRET: change-me
+      ADMIN_SECRET: prof-secret
+    depends_on: [db]
+  frontend:
+    build: ./frontend
+    ports: ["8080:80"]
+    depends_on: [backend]
+volumes: { pgdata: {} }

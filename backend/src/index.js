@@ -1,0 +1,10 @@
+const express = require('express'), cors = require('cors');
+const { init } = require('./db');
+const app = express();
+app.use(cors()); app.use(express.json());
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/groups', require('./routes/groups'));
+app.use('/api/assignments', require('./routes/assignments'));
+app.get('/api/health', (_q, r) => r.json({ ok: true }));
+app.use((e, _req, res, _n) => { console.error(e); res.status(500).json({ error: 'Server error' }); });
+init().then(() => app.listen(process.env.PORT || 4000, () => console.log('API up')));
